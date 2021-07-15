@@ -9,7 +9,7 @@ db.create_all()
 # If table isn't empty, empty it
 User.query.delete()
 
-# Add pets
+# Add users
 albert = User(first_name = 'Albert', last_name="Anderson")
 brittany = User(first_name = 'Brittany', last_name="Baylor")
 carlos = User(first_name = 'Carlos', last_name="Crumbs")

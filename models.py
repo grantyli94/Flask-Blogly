@@ -1,9 +1,10 @@
 """Models for Blogly."""
-from typing import Text
+# from typing import Text
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+# add default image as a global variable and then reference the variable below
 
 def connect_db(app):
     """Connect to database."""

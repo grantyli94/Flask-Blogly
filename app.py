@@ -38,7 +38,7 @@ def add_user():
     last_name = request.form['last_name']
     image_url = request.form['image_url']
 
-    # Maybe enforce 50 characters later
+    # Maybe enforce 50 characters later (add validation on the form)
 
     user = User(first_name=first_name, last_name=last_name, image_url=image_url)
     db.session.add(user)
@@ -66,9 +66,11 @@ def save_user_edit(user_id):
     first_name = request.form['first_name']
     last_name = request.form['last_name']
     image_url = request.form['image_url']
-
+# combine this with above lines
     user.first_name = first_name
     user.last_name = last_name
+
+    # if empty string, pass in Null... so this will trigger the default
     user.image_url = image_url
 
     db.session.commit()
