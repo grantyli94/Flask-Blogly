@@ -7,8 +7,8 @@
 <h1> Edit a user </h1>
 
 <form method='POST' action=''>
-  <p><label>First Name </label><input value="{{ user.first_name }}" name="first_name"></p>
-  <p><label>Last Name </label><input value="{{ user.last_name }}" name="last_name"></p>  
+  <p><label>First Name </label><input value="{{ user.first_name }}" name="first_name" maxlength="50"></p>
+  <p><label>Last Name </label><input value="{{ user.last_name }}" name="last_name" maxlength="50"></p>  
   <p><label>Image URL </label><input value="{{ user.image_url }}" name="image_url"></p>
   <input type='submit' value='Save'>
   <a href='/users/{{ user.id }}'><button>Cancel</button></a>

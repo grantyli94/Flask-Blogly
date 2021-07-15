@@ -1,19 +1,23 @@
-"""Models for Blogly."""
-# from typing import Text
+"""Models for Blogly"""
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-
-# add default image as a global variable and then reference the variable below
+DEFAULT_URL = 'https://www.pngitem.com/pimgs/m/287-2876223_no-profile-picture-available-hd-png-download.png'
 
 def connect_db(app):
-    """Connect to database."""
+    """Connect to database"""
 
     db.app = app
     db.init_app(app)
 
-class User(db.Model):
-    """User"""
+# Nate: No need to describe table schema (the what). It's mostly best to just document how the models work. Joel?
+class User(db.Model): 
+    """A table for users of Blogly, a blogging application
+
+        - id: an auto-incrementing integer number that is the primary key
+        - first_name: a text value limited to 50 characters
+        - last_name: a text value limited to 50 characters
+        - image_url: a text link that defaults to a 'Photo Not Available' image"""
 
     __tablename__ = "users"
 
@@ -24,5 +28,10 @@ class User(db.Model):
                            nullable=False)
     last_name = db.Column(db.String(50),
                            nullable=False)
-    image_url = db.Column(db.String, nullable=False, default='https://www.pngitem.com/pimgs/m/287-2876223_no-profile-picture-available-hd-png-download.png')
+    image_url = db.Column(db.String, nullable=False, default=DEFAULT_URL)
+
+    def __repr__(self):
+        """Show information about the user"""
+
+        return (f"<User {self.id} {self.first_name} {self.last_name}>")
 

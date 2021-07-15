@@ -19,46 +19,82 @@ class UserViewsTestCase(TestCase):
     """Tests for views for Users."""
 
     def setUp(self):
-        """Add sample user."""
+        """Add test user."""
+
         User.query.delete()
 
-        # Add users
-        albert = User(first_name = 'Albert', last_name="Anderson")
-        brittany = User(first_name = 'Brittany', last_name="Baylor")
-        carlos = User(first_name = 'Carlos', last_name="Crumbs")
+        # Add test user
+        user = User(first_name = 'TestUser', last_name="TestLast")
 
-        # Add new objects to session, so they'll persist
-        db.session.add(albert)
-        db.session.add(brittany)
-        db.session.add(carlos)
+        # Add new object to session, so it persists
+        db.session.add(user)
 
         # Commit--otherwise, this never gets saved!
         db.session.commit()
 
         self.user_id = user.id
 
+    def tearDown(self):
+        """Clean up any fouled transaction."""
 
-    # def tearDown(self):
-    #     """Clean up any fouled transaction."""
-    #     db.session.rollback()
-    # def test_list_pets(self):
-    #     with app.test_client() as client:
-    #         resp = client.get("/")
-    #         html = resp.get_data(as_text=True)
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertIn('TestPet', html)
-    # def test_show_pet(self):
-    #     with app.test_client() as client:
-    #         resp = client.get(f"/{self.pet_id}")
-    #         html = resp.get_data(as_text=True)
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertIn('<h1>TestPet</h1>', html)
-    # def test_add_pet(self):
-    #     with app.test_client() as client:
-    #         d = {"name": "TestPet2", "species": "cat", "hunger": 20}
-    #         resp = client.post("/", data=d, follow_redirects=True)
-    #         html = resp.get_data(as_text=True)
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertIn("<h1>TestPet2</h1>", html)
+        db.session.rollback()
+
+    def test_list_users(self):
+        """Test that list of users show"""
+
+        with app.test_client() as client:
+            resp = client.get("/users")
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('TestUser', html)
+
+    def test_show_user(self):
+        """Test that details about a specific user show"""
+
+        with app.test_client() as client:
+            resp = client.get(f"/users/{self.user_id}")
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1> TestUser TestLast </h1>', html)
+
+    def test_add_user(self):
+        """Test that the process of adding a user and redirecting back to the list of users"""
+
+        with app.test_client() as client:
+            d = {"first_name": "TestUser2", "last_name": "TestLast2", "image_url": ""}
+            resp = client.post("/users/new", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("TestUser2 TestLast2", html)
+
+    def test_show_edit_form(self):
+        """Test that the edit user form shows"""
+
+        with app.test_client() as client:
+            resp = client.get(f"/users/{self.user_id}/edit")
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("TestUser", html)
+
+    def test_edit_user(self):
+        """Test that the process of editing a user and redirecting back to the list of users"""
+
+        with app.test_client() as client:
+            d = {"first_name": "TestUserA", "last_name": "TestLastA", "image_url": ""}
+            resp = client.post(f"/users/{self.user_id}/edit", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("TestUserA TestLastA", html)
+
+    def test_delete_user(self):
+        """Test that the process of deleting a user and redirecting back to the list of users"""
+        
+        with app.test_client() as client:
+            resp = client.post(f"/users/{self.user_id}/delete", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn("TestUser", html)
+
+    # passed: python3 -m unittest -v test_flask.py
 
 
