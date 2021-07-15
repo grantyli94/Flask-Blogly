@@ -4,7 +4,7 @@ from app import app
 from models import db, User
 
 # Use test database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///test_blogly'
 app.config['SQLALCHEMY_ECHO'] = False
 
 # Make Flask errors be real errors, rather than HTML pages with error info
