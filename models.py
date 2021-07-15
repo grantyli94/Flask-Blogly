@@ -23,6 +23,5 @@ class User(db.Model):
                            nullable=False)
     last_name = db.Column(db.String(50),
                            nullable=False)
-    image_url = db.Column(db.String)
-    """ TODO: Why can't we set default text value? """
+    image_url = db.Column(db.String, nullable=False, default='https://www.pngitem.com/pimgs/m/287-2876223_no-profile-picture-available-hd-png-download.png')
 
