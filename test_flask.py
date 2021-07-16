@@ -36,7 +36,7 @@ class UserViewsTestCase(TestCase):
         self.user_id = user.id
 
         # Add test post
-        post = Post(title = 'TestTitle', content = 'TestContent')
+        post = Post(title = 'TestTitle', content = 'TestContent', user_id=self.user_id)
 
         # Add new post object to session, so it persists
         db.session.add(post)
@@ -97,7 +97,7 @@ class UserViewsTestCase(TestCase):
             resp = client.post(f"/users/{self.user_id}/edit", data=d, follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("TestUserA TestLastA", html)
+            self.assertIn("TestUserA TestLastA", html) #TODO: specify html element
 
     def test_delete_user(self):
         """Test that the process of deleting a user and redirecting back to the list of users"""
@@ -125,7 +125,7 @@ class UserViewsTestCase(TestCase):
             resp = client.post(f"/users/{self.user_id}/posts/new", data=d, follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("TestTitle2", html)
+            self.assertIn("TestTitle2", html) #TODO: specify html element
 
     def test_show_post(self):
         """Test that details about a specific post show"""
@@ -143,7 +143,7 @@ class UserViewsTestCase(TestCase):
             resp = client.get(f"/posts/{self.post_id}/edit")
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("TestTitle", html)
+            self.assertIn("TestTitle", html) #TODO: specify html
 
     def test_edit_post(self):
         """Test the process of editing a post and redirecting back to the post view"""

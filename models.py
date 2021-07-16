@@ -13,12 +13,7 @@ def connect_db(app):
 
 
 class User(db.Model): 
-    """A table for users of Blogly, a blogging application
-
-        - id: an auto-incrementing integer number that is the primary key
-        - first_name: a text value limited to 50 characters
-        - last_name: a text value limited to 50 characters
-        - image_url: a text link that defaults to a 'Photo Not Available' image"""
+    """A table for users of Blogly, a blogging application"""
 
     __tablename__ = "users"
 
@@ -40,6 +35,7 @@ class User(db.Model):
 
 
 class Post(db.Model):
+    """A table for posts written by user of Blogly"""
 
     __tablename__ = "posts"
 
@@ -54,10 +50,43 @@ class Post(db.Model):
                            nullable=False,
                            default=datetime.now())
     user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id'))
+                        db.ForeignKey('users.id'),
+                        nullable=False)
+                        
     
     def __repr__(self):
         """Show information about the post"""
         
         return (f"<Post {self.id} {self.title} {self.created_at}>")
+
+
+class Tag(db.Model):
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    name = db.Column(db.String(50),
+                     nullable=False)
+    
+    posts = db.relationship('Post',
+                            secondary='posts_tags',
+                            backref='tags')
+
+    def __repr__(self):
+        """Shows information about the tag"""
+
+        return (f"<Tag {self.id} {self.name}>")
+
+class PostTag(db.Model):
+
+    __tablename__ = "posts_tags"
+
+    post_id = db.Column(db.Integer,
+                        db.ForeignKey('posts.id'),
+                        primary_key=True)
+    tag_id = db.Column(db.Integer,
+                        db.ForeignKey('tags.id'),
+                        primary_key=True)
 

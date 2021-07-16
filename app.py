@@ -77,7 +77,9 @@ def save_user_edit(user_id):
 def delete_user(user_id):
     """Delete the user"""
 
+    Post.query.filter(Post.user_id == user_id).delete()
     user = User.query.get_or_404(user_id)
+    # user.posts.clear() TODO: this doesn't work, ask about proper method
     db.session.delete(user)
     db.session.commit()
 
